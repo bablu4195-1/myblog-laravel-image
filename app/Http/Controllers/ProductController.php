@@ -16,8 +16,9 @@ class ProductController extends Controller
     {
         $products = Product::latest()->paginate(5);
 
-        return view('product.index', compact('products'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        // return view('product.index', compact('products'))
+        //     ->with('i', (request()->input('page', 1) - 1) * 5);
+        return response()->json($products);
     }
 
     /**
@@ -27,7 +28,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        // return view('product.create');
+        return response()->json(['message' => 'success']);
     }
 
     /**
@@ -41,7 +43,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required',
         ]);
 
         $input = $request->all();
@@ -55,8 +57,11 @@ class ProductController extends Controller
 
         Product::create($input);
 
-        return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
+        // return redirect()->route('products.index')
+        //     ->with('success', 'Product created successfully.');
+        return response()->json([
+            'message' => 'success',
+            'data' => $input]);
     }
 
     /**
@@ -67,7 +72,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('product.show', compact('product'));
+        // return view('product.show', compact('product'));
+        return response()->json($product);
     }
 
     /**
@@ -78,7 +84,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('product.edit', compact('product'));
+        // return view('product.edit', compact('product'));
+        return response()->json($product);
     }
 
     /**
@@ -108,8 +115,11 @@ class ProductController extends Controller
 
         $product->update($input);
 
-        return redirect()->route('products.index')
-            ->with('success', 'Product updated successfully');
+        // return redirect()->route('products.index')
+        //     ->with('success', 'Product updated successfully');
+        return response()->json([
+            'message' => 'success',
+            'data' => $product]);
     }
 
     /**
@@ -122,7 +132,10 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return redirect()->route('products.index')
-            ->with('success', 'Product deleted successfully');
+        // return redirect()->route('products.index')
+        //     ->with('success', 'Product deleted successfully');
+        return response()->json([
+            'message' => 'success',
+            'data' => $product]);
     }
 }
